@@ -1,41 +1,371 @@
 // 导入 Pico CSS
 @use "@picocss/pico/scss/pico.scss" as pico with (
-  $theme-color: "slate"  
+  $theme-color: "slate"
 );
 
+// 基础样式
+pre > code {
+  text-wrap: auto;
+}
 
+// 导航菜单样式
+nav {
+  ul {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
 
-// 响应式字体大小设置
-@media (min-width: 576px) {
-  :root {
-    --pico-font-size: 100%;
+  a {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  // 响应式设计：在小屏幕上只显示图标
+  @media (max-width: 576px) {
+    .menu-text {
+      display: none;
+    }
+
+    a {
+      padding: 0.5rem;
+    }
+
+    .icon svg {
+      width: 20px;
+      height: 20px;
+    }
+  }
+
+  // 在中等屏幕上调整间距
+  @media (min-width: 577px) and (max-width: 768px) {
+    a {
+      padding: 0.5rem;
+    }
+
+    .icon svg {
+      width: 20px;
+      height: 20px;
+    }
   }
 }
 
-@media (min-width: 768px) {
-  :root {
-    --pico-font-size: 100%;
+// 标签列表样式
+.tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.tag-item {
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  font-size: 0.875rem;
+  background-color: var(--primary);
+  color: var(--primary-inverse);
+  text-decoration: none;
+
+  &:hover {
+    opacity: 0.9;
+  }
+
+  &.active {
+    background-color: rgba(0, 0, 0, 0.1);
+    color: var(--color);
   }
 }
 
-@media (min-width: 1024px) {
-  :root {
-    --pico-font-size: 100%;
+// 帖子列表样式
+.post-list {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  li {
+    list-style: none;
+  }
+
+  .post-item {
+    border-radius: 0.25rem;
+    transition: background-color 0.2s;
+    .post-title-row {
+
+      .post-title {
+        font-size: 1.1rem;
+        text-decoration: none;
+        word-break: break-word;
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
   }
 }
 
-@media (min-width: 1280px) {
-  :root {
-    --pico-font-size: 95%;
+.post-meta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  font-size: 0.85rem;
+  color: var(--muted-color);
+  align-items: center;
+}
+
+.post-time {
+  white-space: nowrap;
+}
+
+.post-comments {
+  white-space: nowrap;
+}
+
+.post-tag {
+  background-color: rgba(0, 0, 0, 0.1);
+  padding: 0.2rem 0.5rem;
+  border-radius: 0.25rem;
+  font-size: 0.8rem;
+
+  a {
+    color: inherit;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+.post-author {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+// 单个帖子页面样式
+.post {
+  margin-bottom: 2rem;
+
+  .post-header {
+  }
+
+  .post-title {
+    font-weight: 700;
+    font-size: 1.5rem;
+    margin-right: 1rem;
+  }
+
+  .post-content {
+    margin-bottom: 1rem;
+
+    img {
+      max-width: 100%;
+      height: auto;
+    }
+  }
+
+  .post-footer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--muted-border-color);
+  }
+
+  .post-date {
+    color: var(--muted-color);
+    font-size: 0.875rem;
+  }
+}
+
+// 评论区样式
+.comments {
+  margin-top: 2rem;
+
+  .comments-header {
+    font-size: 1.25rem;
+    font-weight: bold;
+    margin: 1rem 0;
+  }
+
+  .comments-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  article {
+    padding: 1rem;
+    border-radius: 0.25rem;
+    background-color: rgba(0, 0, 0, 0.02);
+    margin-bottom: 1rem;
+
+    header {
+      margin-bottom: 0.5rem;
+    }
+
+    .comment-header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .comment-author {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--muted-color);
+    }
+
+    .comment-date {
+      color: var(--muted-color);
+      font-size: 0.875rem;
+    }
+
+    .comment-floor {
+      background-color: rgba(0, 0, 0, 0.05);
+      border-radius: 0.25rem;
+      padding: 0 0.5rem;
+    }
+
+    .comment-content {
+      margin-top: 0.5rem;
+
+      img {
+        max-width: 100%;
+        height: auto;
+      }
+    }
+  }
+
+  .comment-form {
+    margin-top: 1rem;
+  }
+
+  .pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 1rem;
+
+    .page-item {
+      padding: 0.5rem 0.75rem;
+      margin: 0 0.25rem;
+      border-radius: 0.25rem;
+      background-color: rgba(0, 0, 0, 0.05);
+      text-decoration: none;
+
+      &:hover {
+        background-color: rgba(0, 0, 0, 0.1);
+      }
+
+      &.active {
+        background-color: var(--primary);
+        color: var(--primary-inverse);
+      }
+    }
+  }
+}
+
+// 表单样式
+.form-card {
+  max-width: 100%;
+  margin-bottom: 1rem;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+// 图标样式
+.icon-small {
+  width: 1rem;
+  height: 1rem;
+  cursor: pointer;
+}
+
+.avatar-small {
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+// 卡片样式
+.card {
+  padding: 1rem;
+  border-radius: 0.25rem;
+  border: 1px solid var(--muted-border-color);
+  background-color: var(--card-background-color);
+  margin-bottom: 1rem;
+}
+
+// 网格布局
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+// 响应式设计：大屏幕布局
+@media (min-width: 769px) {
+  .post-item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .post-title-row {
+    flex: 1;
+    margin-bottom: 0;
+    margin-right: 1rem;
+  }
+
+  .post-meta-row {
+    white-space: nowrap;
+  }
+}
+
+// 确保移动端视图正确
+@media (max-width: 576px) {
+  .container {
+    padding: 0 0.5rem;
+  }
+}
+
+// 修复Pico CSS在移动端的一些问题
+html {
+  scroll-padding-top: 1rem;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+// 确保表格在移动端可以滚动
+table {
+  display: block;
+  overflow-x: auto;
+  white-space: nowrap;
+
+  @media (min-width: 768px) {
+    display: table;
+    white-space: normal;
   }
 }
 
 
-
-
-pre>code{
-  text-wrap:auto;
-}
-[un-cloak] {
-  display: none;
+.tag-list-view{
+  display: flex;
+  margin:1rem 0;
+  gap:1rem;
 }

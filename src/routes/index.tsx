@@ -72,11 +72,11 @@ index.get("/posts", async (c) => {
   return c.render(
     <article>
       <header>
-        <div className="tag-list flex flex-wrap gap-2 ">
+        <div class="tag-list">
           <a
             href="/posts"
-            className={`p-1 rounded text-sm ${
-              !tagName && !username ? "bg-gray-2" : "bg-primary"
+            class={`tag-item ${
+              !tagName && !username ? "active" : ""
             }`}
           >
             全部
@@ -85,8 +85,8 @@ index.get("/posts", async (c) => {
             <a
               key={tag.id}
               href={`/posts?tag=${tag.name}`}
-              className={`p-1 rounded text-sm ${
-                tagName === tag.name ? "bg-gray-2" : "bg-primary"
+              class={`tag-item ${
+                tagName === tag.name ? "active" : ""
               }`}
             >
               {tag.name}({tag.post_count})
@@ -97,43 +97,47 @@ index.get("/posts", async (c) => {
       {tagName && <h6>标签: {tagName}</h6>}
       {username && <h6>用户: {username} 的帖子</h6>}
       {posts.length > 0 ? (
-        <ul className="flex flex-col space-y-2">
+        <ul class="post-list">
           {posts.map((post) => (
-            <li key={post.id} className="flex space-x-2 items-start">
-              <span data-timestamp={post.created_at}>
-                {new Date(post.created_at + "Z").toLocaleString()}
-              </span>
-              <a
-                className="whitespace-nowrap overflow-hidden text-ellipsis max-w-md"
-                href={`/posts/${post.id}`}
-              >
-                {post.title}
-              </a>
-              {post.comment_count !== undefined && post.comment_count > 0 && (
-                <span className="text-gray-500 ">
-                  ({post.comment_count}条评论)
+            <li key={post.id} class="post-item">
+              <div class="post-title-row">
+                <a
+                  class="post-title"
+                  href={`/posts/${post.id}`}
+                >
+                  {post.title}
+                  {post.comment_count !== undefined && post.comment_count > 0 && (
+                  <span class="post-comments">
+                    ({post.comment_count}条评论)
+                  </span>
+                )}
+                </a>
+               
+              </div>
+              
+              <div class="post-meta-row">
+                <span class="post-time" data-timestamp={post.created_at}>
+                  {new Date(post.created_at + "Z").toLocaleString()}
                 </span>
-              )}
-              <span className="bg-gray-2 p-1 rounded text-xs mx-4">
+                
+               
+                
                 {post.tag && (
-                  <span>
+                  <span class="post-tag">
                     <a href={`/posts?tag=${post.tag}`}>{post.tag}</a>
                   </span>
                 )}
-              </span>
 
-              {usernameToAvatar[post.author] && (
-                <img
-                  src={usernameToAvatar[post.author]}
-                  alt={`${post.author}'s avatar`}
-                  className="avatar-small"
-                  style={{
-                    width: "20px",
-                    height: "20px",
-                    borderRadius: "50%",
-                  }}
-                />
-              )}              
+                <span class="post-author">
+                  {usernameToAvatar[post.author] && (
+                    <img
+                      src={usernameToAvatar[post.author]}
+                      alt={`${post.author}'s avatar`}
+                      class="avatar-small"
+                    />
+                  )}
+                </span>
+              </div>
             </li>
           ))}
         </ul>

@@ -143,32 +143,32 @@ posts.get("/:id", async (c) => {
 
   return c.render(
     <div>
-      <article className="post">
+      <article class="post">
         <header>
-          <div className="">
-            <span className="fw-700 text-2xl mr-4">{post.title}</span>
+          <div class="post-header">
+            <span class="post-title">{post.title}</span>
           </div>
         </header>
 
         <div
-          className="post-content"
+          class="post-content"
           dangerouslySetInnerHTML={{ __html: post.content }}
         ></div>
 
-        <footer className="flex space-x-2 items-center">
+        <footer class="post-footer">
          
-          <span>
+          <span class="post-author">
             <a href={`/posts?username=${post.author}`}>{post.author}</a>
           </span>
 
           {post.tag && (
-            <span className="text-sm bg-gray-2 p-1 rounded">
+            <span class="post-tag">
               <a href={`/posts?tag=${post.tag}`}>{post.tag}</a>
             </span>
           )}
 
 
-          <span className="post-date" data-timestamp={post.created_at}>
+          <span class="post-date" data-timestamp={post.created_at}>
             {new Date(post.created_at + "Z").toLocaleString()}
           </span>
           {currentUser && (
@@ -183,7 +183,7 @@ posts.get("/:id", async (c) => {
                     xmlns="http://www.w3.org/2000/svg"
                     xmlns:xlink="http://www.w3.org/1999/xlink"
                     viewBox="0 0 24 24"
-                    className="w-4 h-4 cursor-pointer"
+                    class="icon-small"
                   >
                     <g
                       fill="none"
@@ -205,7 +205,7 @@ posts.get("/:id", async (c) => {
                     xmlns="http://www.w3.org/2000/svg"
                     xmlns:xlink="http://www.w3.org/1999/xlink"
                     viewBox="0 0 32 32"
-                    className="w-4 h-4 cursor-pointer"
+                    class="icon-small"
                   >
                     <path d="M12 12h2v12h-2z" fill="currentColor"></path>
                     <path d="M18 12h2v12h-2z" fill="currentColor"></path>
@@ -226,7 +226,7 @@ posts.get("/:id", async (c) => {
                     xmlns="http://www.w3.org/2000/svg"
                     xmlns:xlink="http://www.w3.org/1999/xlink"
                     viewBox="0 0 24 24"
-                    className="w-4 h-4 cursor-pointer"
+                    class="icon-small"
                   >
                     <g
                       fill="none"
@@ -247,33 +247,27 @@ posts.get("/:id", async (c) => {
         </footer>
       </article>
 
-      <section className="comments">
+      <section class="comments">
         {comments.length > 0 ? (
           <>
-            <div className="text-xl font-bold my-4">评论 ({totalComments})</div>
-            <div className="flex flex-col space-y-2">
+            <div class="comments-header">评论 ({totalComments})</div>
+            <div class="comments-list">
               {comments.map((comment) => (
                 <div key={comment.id}>
                   <article>
                     <header>
-                      <div className="flex items-center space-x-2">
-                        <span className="text-gray-500 flex items-center space-x-2">
+                      <div class="comment-header">
+                        <span class="comment-author">
                           {comment.author_avatar && (
                             <img
                               src={`${c.env.GRAVATAR_BASE_URL}${comment.author_avatar}?d=identicon`}
-                              alt={`${comment.author}的头像`}
-                              className="w-6 h-6 rounded-full "
+                              alt={`${comment.author}'s avatar`}
+                              class="avatar-small"
                             />
                           )}
-
                           <a href={`/posts?username=${comment.author}`}>
                             {comment.author}
                           </a>
-                          <span data-timestamp={comment.created_at}>
-                            {new Date(
-                              comment.created_at + "Z"
-                            ).toLocaleString()}
-                          </span>
                         </span>
                         {currentUser && (
                           <>
@@ -287,7 +281,7 @@ posts.get("/:id", async (c) => {
                                   xmlns="http://www.w3.org/2000/svg"
                                   xmlns:xlink="http://www.w3.org/1999/xlink"
                                   viewBox="0 0 24 24"
-                                  className="w-4 h-4 cursor-pointer"
+                                  class="icon-small"
                                 >
                                   <g
                                     fill="none"
@@ -309,7 +303,7 @@ posts.get("/:id", async (c) => {
                                   xmlns="http://www.w3.org/2000/svg"
                                   xmlns:xlink="http://www.w3.org/1999/xlink"
                                   viewBox="0 0 32 32"
-                                  className="w-4 h-4 cursor-pointer"
+                                  class="icon-small"
                                 >
                                   <path d="M12 12h2v12h-2z" fill="currentColor"></path>
                                   <path d="M18 12h2v12h-2z" fill="currentColor"></path>
@@ -330,7 +324,7 @@ posts.get("/:id", async (c) => {
                                   xmlns="http://www.w3.org/2000/svg"
                                   xmlns:xlink="http://www.w3.org/1999/xlink"
                                   viewBox="0 0 24 24"
-                                  className="w-4 h-4 cursor-pointer"
+                                  class="icon-small"
                                 >
                                   <g
                                     fill="none"
@@ -348,13 +342,14 @@ posts.get("/:id", async (c) => {
                             )}
                           </>
                         )}
-                        <span className="bg-gray-1 rounded px-2">
-                          #{comment.floor_number}楼
+                        <span class="comment-date" data-timestamp={comment.created_at}>
+                          {new Date(comment.created_at + "Z").toLocaleString()}
                         </span>
+                        <span class="comment-floor">#{comment.floor_number}楼</span>
                       </div>
                     </header>
                     <div
-                      className="comment-content"
+                      class="comment-content"
                       dangerouslySetInnerHTML={{
                         __html: parseMarkdown(comment.content),
                       }}
@@ -363,17 +358,13 @@ posts.get("/:id", async (c) => {
                 </div>
               ))}
             </div>
-            <div className="pagination mt-4 flex justify-center">
+            <div class="pagination">
               {totalPages > 1 &&
                 Array.from({ length: totalPages }, (_, index) => (
                   <a
                     key={index}
                     href={`/posts/${id}?page=${index + 1}`}
-                    className={`px-3 py-2 mx-1 ${
-                      page === index + 1
-                        ? "bg-blue-500 text-white"
-                        : "bg-gray-200"
-                    } rounded`}
+                    class={`page-item ${page === index + 1 ? "active" : ""}`}
                   >
                     {index + 1}
                   </a>
@@ -389,7 +380,7 @@ posts.get("/:id", async (c) => {
             <form
               action={`/posts/${id}/comment`}
               method="post"
-              className="comment-form"
+              class="comment-form"
               id="comment-form"
             >
               <h4>发表评论</h4>
@@ -399,7 +390,7 @@ posts.get("/:id", async (c) => {
                   name="content"
                   rows={5}
                   required
-                  placeholder="在此输入评论内容，支持 Markdown 格式..."
+                  placeholder="在此输入评论内容..."
                 ></textarea>
               </div>
               <button type="submit">提交评论</button>
@@ -407,8 +398,7 @@ posts.get("/:id", async (c) => {
           </article>
         ) : (
           <p>
-            <a href={`/user/login?redirect=/posts/${id}`}>登录</a>{" "}
-            后才能发表评论
+            <a href={`/user/login?redirect=/posts/${id}`}>登录</a> 后才能发表评论
           </p>
         )}
       </section>
@@ -475,7 +465,7 @@ posts.get("/:id/edit", jwtAuth, async (c) => {
             id="content"
             name="content"
             required
-            rows={10}
+            rows={20}
             placeholder="在此输入内容，支持 Markdown 格式..."
           >
             {editContent.trim()}
@@ -544,7 +534,7 @@ posts.post("/:id/edit", jwtAuth, async (c) => {
       <div>
         <h1>编辑失败</h1>
         <p>标题和内容不能为空</p>
-        <a href={`/posts/${id}/edit`} className="button">
+        <a href={`/posts/${id}/edit`} class="button">
           返回
         </a>
       </div>,
@@ -599,13 +589,13 @@ posts.get("/:id/delete", jwtAuth, async (c) => {
   return c.render(
     <article>
       <header>删除帖子</header>
-      <div className="card">
+      <div class="card">
         <h3>{post.title}</h3>
         <p>作者: {post.author}</p>
         <p>发布时间:{new Date(post.created_at + "Z").toLocaleDateString()}</p>
-        <p className="warning">确定要删除这篇帖子吗？此操作不可撤销。</p>
+        <p class="warning">确定要删除这篇帖子吗？此操作不可撤销。</p>
       </div>
-      <footer className="flex space-x-2 items-center">
+      <footer class="flex space-x-2 items-center">
         <button
           hx-post={`/posts/${id}/delete`}
           hx-target="body"
@@ -617,7 +607,7 @@ posts.get("/:id/delete", jwtAuth, async (c) => {
           hx-get={`/posts/${id}`}
           hx-target="body"
           hx-push-url="true"
-          className="contrast"
+          class="contrast"
         >
           取消
         </button>
@@ -714,10 +704,10 @@ posts.get(
         <form
           action={`/posts/${postId}/comment/${commentId}/edit`}
           method="post"
-          className="form-card"
+          class="form-card"
           id="comment-form"
         >
-          <div className="form-group">
+          <div class="form-group">
             <label htmlFor="content">评论内容:</label>
             <textarea
               id="content"
@@ -731,7 +721,7 @@ posts.get(
           </div>
           <button
             type="submit"
-            className="bg-blue-500 text-white px-4 py-2 rounded"
+            class="bg-blue-500 text-white px-4 py-2 rounded"
           >
             更新评论
           </button>
@@ -854,12 +844,12 @@ posts.get(
           帖子: <a href={`/posts/${postId}`}>{post.title}</a>
         </p>
         <p>评论作者: {comment.author}</p>
-        <div className="p-4 border rounded my-4">
+        <div class="p-4 border rounded my-4">
           <h4>评论内容:</h4>
           <div dangerouslySetInnerHTML={{ __html: comment.content }}></div>
         </div>
 
-        <footer className="mt-4 space-x-4">
+        <footer class="mt-4 space-x-4">
           <button
             hx-post={`/posts/${postId}/comment/${commentId}/delete`}
             hx-target="body"

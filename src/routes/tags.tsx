@@ -34,12 +34,12 @@ tags.get("/", async (c) => {
   return c.render(
     <article>
       {isAdmin && (
-        <div className="mb-4">
+        <div class="mb-4">
           <button
             hx-get="/tags/new"
             hx-target="body"
             hx-push-url="true"
-           className="secondary"
+            class="secondary"
           >
             添加新标签
           </button>
@@ -47,22 +47,22 @@ tags.get("/", async (c) => {
       )}
 
       {allTags.length > 0 ? (
-        <div className="tag-list">
+        <div class="">
           {allTags.map((tag) => (
             <div
-              className="tag-item flex justify-between items-center p-2 border-b"
+             
               key={tag.id}
             >
-              <div>
+              <div  className="tag-list-view">
                 <a
                   href={`/posts?tag=${tag.name}`}
-                  className="bg-gray-2 p-1 rounded mr-2 text-sm"
+                  class="bg-gray-2 p-1 rounded mr-2 text-sm"
                 >
                   {tag.name}({tag.post_count})
                 </a>
                 {isAdmin && (
-                  <span className="space-x-2 ml-2">
-                    <a href={`/tags/edit/${tag.id}`}>编辑</a>
+                  <span class="space-x-2 ml-2">
+                    <a style="margin-right:5px;" href={`/tags/edit/${tag.id}`}>编辑</a>
                     <a href={`/tags/delete/${tag.id}`}>删除</a>
                   </span>
                 )}
@@ -86,14 +86,14 @@ tags.get("/new", jwtAuth, adminOnly, async (c) => {
   return c.render(
     <article>
       <header>添加新标签</header>
-      <form action="/tags/new" method="post" className="form-card">
-        <div className="form-group">
-          <label htmlFor="name">标签名称:</label>
+      <form action="/tags/new" method="post" class="form-card">
+        <div class="form-group">
+          <label for="name">标签名称:</label>
           <input type="text" id="name" name="name" required />
         </div>
         <button
           type="submit"
-          className="bg-blue-500 text-white px-4 py-2 rounded"
+          class="bg-blue-500 text-white px-4 py-2 rounded"
         >
           添加标签
         </button>
@@ -176,14 +176,14 @@ tags.get("/edit/:id", jwtAuth, adminOnly, async (c) => {
   return c.render(
     <div>
       <h1>编辑标签</h1>
-      <form action={`/tags/edit/${id}`} method="post" className="form-card">
-        <div className="form-group">
-          <label htmlFor="name">标签名称:</label>
+      <form action={`/tags/edit/${id}`} method="post" class="form-card">
+        <div class="form-group">
+          <label for="name">标签名称:</label>
           <input type="text" id="name" name="name" value={tag.name} required />
         </div>
         <button
           type="submit"
-          className="bg-blue-500 text-white px-4 py-2 rounded"
+          class="bg-blue-500 text-white px-4 py-2 rounded"
         >
           保存修改
         </button>
@@ -279,16 +279,16 @@ tags.get("/delete/:id", jwtAuth, adminOnly, async (c) => {
   return c.render(
     <div>
       <h1>删除标签</h1>
-      <div className="card">
+      <div class="card">
         <h3>标签: {tag.name}</h3>
         <p>创建时间: {new Date(tag.created_at+"Z").toLocaleString()}</p>
 
-        <p className="warning">确定要删除这个标签吗？此操作不可撤销。</p>
+        <p class="warning">确定要删除这个标签吗？此操作不可撤销。</p>
 
-        <div className="grid">
+        <div class="grid">
           <a
             href="/tags"
-            className="bg-gray-500 text-white px-4 py-2 rounded text-center"
+            class="bg-gray-500 text-white px-4 py-2 rounded text-center"
           >
             取消
           </a>
@@ -301,7 +301,7 @@ tags.get("/delete/:id", jwtAuth, adminOnly, async (c) => {
             <input type="hidden" name="confirm" value="true" />
             <button
               type="submit"
-              className="bg-red-500 text-white px-4 py-2 rounded text-center"
+              class="bg-red-500 text-white px-4 py-2 rounded text-center"
             >
               确认删除
             </button>

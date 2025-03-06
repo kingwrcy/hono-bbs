@@ -62,3 +62,22 @@ npx wrangler d1 execute 数据库名 --file ./schema.sql --remote
 -- 部署
 pnpm run deploy
 ```
+
+
+#### 本地开发
+
+执行脚本:
+
+```shell
+-- 安装依赖
+pnpm install
+
+-- 执行数据库初始化脚本
+npx wrangler d1 execute 数据库名 --file ./schema.sql
+
+-- 启动开发服务器
+pnpm run dev
+
+```
+
+
