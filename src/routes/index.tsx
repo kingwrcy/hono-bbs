@@ -4,8 +4,8 @@ import { verify } from "hono/jwt";
 import { PostService } from "../services/post.service";
 import { UserService } from "../services/user.service";
 import { TagService } from "../services/tag.service";
-import type { Bindings, Variables } from "../types/app";
-import { ExtendedJWTPayload } from "../types/app";
+import type { Bindings, Variables } from "../types";
+import { ExtendedJWTPayload } from "../types";
 
 const index = new Hono<{ Bindings: Bindings; Variables: Variables }>();
 
@@ -71,12 +71,12 @@ index.get("/posts", async (c) => {
 
   return c.render(
     <article>
-      <header>
-        <div class="tag-list">
+      <header class="mb-2">
+        <div class="flex items-center text-sm ">
           <a
             href="/posts"
-            class={`tag-item ${
-              !tagName && !username ? "active" : ""
+            class={`py-1 px-2 color-[var(--primary-inverse)] no-underline rounded ${
+              !tagName && !username ? "bg-gray-2" : ""
             }`}
           >
             全部
@@ -85,8 +85,8 @@ index.get("/posts", async (c) => {
             <a
               key={tag.id}
               href={`/posts?tag=${tag.name}`}
-              class={`tag-item ${
-                tagName === tag.name ? "active" : ""
+              class={`py-1 px-2 color-[var(--primary-inverse)] rounded no-underline ${
+                tagName === tag.name ? "bg-gray-2" : ""
               }`}
             >
               {tag.name}({tag.post_count})
@@ -97,46 +97,46 @@ index.get("/posts", async (c) => {
       {tagName && <h6>标签: {tagName}</h6>}
       {username && <h6>用户: {username} 的帖子</h6>}
       {posts.length > 0 ? (
-        <ul class="post-list">
+        <ul class="space-y-1 pl-0">
           {posts.map((post) => (
-            <li key={post.id} class="post-item">
-              <div class="post-title-row">
-                <a
-                  class="post-title"
-                  href={`/posts/${post.id}`}
-                >
-                  {post.title}
-                  {post.comment_count !== undefined && post.comment_count > 0 && (
-                  <span class="post-comments">
-                    ({post.comment_count}条评论)
-                  </span>
+            <li
+              key={post.id}
+              class=" list-none flex items-center justify-between"
+            >
+              <a
+                class="flex-1 text-normal no-underline"
+                href={`/posts/${post.id}`}
+              >
+                {post.title}
+                {post.comment_count !== undefined && post.comment_count > 0 && (
+                  <span>({post.comment_count}条评论)</span>
                 )}
-                </a>
-               
-              </div>
-              
-              <div class="post-meta-row">
+              </a>
+
+              <div class="flex items-center text-sm space-x-2">
+                {post.tag && (
+                  <a
+                    class="bg-gray-2 p-1 rounded text-xs no-underline color-[var(--primary-inverse)]"
+                    href={`/posts?tag=${post.tag}`}
+                  >
+                    {post.tag}
+                  </a>
+                )}
+
                 <span class="post-time" data-timestamp={post.created_at}>
                   {new Date(post.created_at + "Z").toLocaleString()}
                 </span>
-                
-               
-                
-                {post.tag && (
-                  <span class="post-tag">
-                    <a href={`/posts?tag=${post.tag}`}>{post.tag}</a>
-                  </span>
-                )}
 
-                <span class="post-author">
-                  {usernameToAvatar[post.author] && (
-                    <img
-                      src={usernameToAvatar[post.author]}
-                      alt={`${post.author}'s avatar`}
-                      class="avatar-small"
-                    />
-                  )}
-                </span>
+                {usernameToAvatar[post.author] && (
+                  <img
+                    hx-get={`profile/${post.author}`}
+                    hx-target-="body"
+                    hx-push-url="true"
+                    src={usernameToAvatar[post.author]}
+                    alt={`${post.author}'s avatar`}
+                    class="w-5 h-5 rounded-full"
+                  />
+                )}
               </div>
             </li>
           ))}

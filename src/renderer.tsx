@@ -1,9 +1,6 @@
 import { jsxRenderer } from 'hono/jsx-renderer'
 import { ExtendedJWTPayload } from './types';
-
-interface HeaderProps {
-  user?: ExtendedJWTPayload | null;
-}
+import { generateClientScripts } from './utils/clientScripts';
 
 // SVG图标组件
 const HomeIcon = () => (
@@ -61,6 +58,10 @@ const LogoutIcon = () => (
   </svg>
 );
 
+interface HeaderProps {
+  user?: ExtendedJWTPayload | null;
+}
+
 const Header = ({ user }: HeaderProps) => {
   const isLoggedIn = !!user;
   const isAdmin = user?.role === 'admin';
@@ -68,32 +69,32 @@ const Header = ({ user }: HeaderProps) => {
   return (
     <header>
       <nav>
-        <ul>
+        <ul className="flex items-center space-x-2">
           <li><strong>Acme Corp</strong></li>
           <li>
-            <a href="/" class="secondary">
-              <span class="icon"><HomeIcon /></span>
-              <span class="menu-text">首页</span>
+            <a href="/" class="secondary flex items-center space-x-2">
+              <span class="flex items-center justify-center"><HomeIcon /></span>
+              <span class="hidden md:inline-block">首页</span>
             </a>
           </li>
           <li>
-            <a href="/tags" class="secondary">
-              <span class="icon"><TagIcon /></span>
-              <span class="menu-text">标签</span>
+            <a href="/tags" class="secondary flex items-center space-x-2">
+              <span class="flex items-center justify-center"><TagIcon /></span>
+              <span class="hidden md:inline-block">标签</span>
             </a>
           </li>
           {isLoggedIn && (
             <>
               <li>
-                <a href="/posts/new" class="secondary">
-                  <span class="icon"><PostIcon /></span>
-                  <span class="menu-text">发布</span>
+                <a href="/posts/new" class="secondary flex items-center space-x-2">
+                  <span class="flex items-center justify-center"><PostIcon /></span>
+                  <span class="hidden md:inline-block">发布</span>
                 </a>
               </li>
               <li>
-                <a href={`/posts?username=${user.username}`} class="secondary">
-                  <span class="icon"><UserIcon /></span>
-                  <span class="menu-text">{user.username}{isAdmin && '(管理员)'}</span>
+                <a href={`/profile/${user.username}`} class="secondary flex items-center space-x-2">
+                  <span class="flex items-center justify-center"><UserIcon /></span>
+                  <span class="hidden md:inline-block">{user.username}</span>
                 </a>
               </li>             
             </>
@@ -101,24 +102,24 @@ const Header = ({ user }: HeaderProps) => {
           {!isLoggedIn && (
             <>
               <li>
-                <a href="/user/reg" class="secondary">
-                  <span class="icon"><RegisterIcon /></span>
-                  <span class="menu-text">注册</span>
+                <a href="/user/reg" class="secondary flex items-center space-x-2">
+                  <span class="flex items-center justify-center"><RegisterIcon /></span>
+                  <span class="hidden md:inline-block">注册</span>
                 </a>
               </li>
               <li>
-                <a href="/user/login" class="secondary">
-                  <span class="icon"><LoginIcon /></span>
-                  <span class="menu-text">登录</span>
+                <a href="/user/login" class="secondary flex items-center space-x-2">
+                  <span class="flex items-center justify-center"><LoginIcon /></span>
+                  <span class="hidden md:inline-block">登录</span>
                 </a>
               </li>
             </>
           )}
           {isLoggedIn && (
             <li>
-              <a href="/user/logout" class="secondary">
-                <span class="icon"><LogoutIcon /></span>
-                <span class="menu-text">退出</span>
+              <a href="/user/logout" class="secondary flex items-center space-x-2">
+                <span class="flex items-center justify-center"><LogoutIcon /></span>
+                <span class="hidden md:inline-block">退出</span>
               </a>
             </li>
           )}
@@ -137,14 +138,15 @@ export const renderer = jsxRenderer(({ children, title, user }) => {
         <title>{title}</title>
         <link rel="stylesheet" href="/static/main.css?v=1.0.3" />
         <link rel="icon" href="/static/favicon.ico" />
+        <script src="https://cdn.jsdelivr.net/npm/@unocss/runtime"></script>
         <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.4/dist/htmx.min.js"></script>
       </head>
-      <body>
+      <body un-cloak>
         <main class="container">
           <Header user={user} />
           {children}
         </main>
-        <script src="/static/js/timestamp-converter.js"></script>
+        <script src="/static/js/client.js"></script>
       </body>
     </html>
   )

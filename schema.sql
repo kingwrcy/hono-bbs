@@ -69,3 +69,25 @@ BEGIN
     SET comment_count = CASE WHEN comment_count > 0 THEN comment_count - 1 ELSE 0 END 
     WHERE id = OLD.post_id;
 END;
+
+-- 创建系统配置表
+CREATE TABLE IF NOT EXISTS settings (
+  id INTEGER PRIMARY KEY,
+  key TEXT NOT NULL UNIQUE,
+  value TEXT NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 添加默认配置
+INSERT OR IGNORE INTO settings (key, value) VALUES 
+  ('site_name', '{"value": "Hono BBS", "description": "网站名称"}'),
+  ('enable_registration', '{"value": true, "description": "是否允许新用户注册"}'),
+  ('enable_comments', '{"value": true, "description": "是否允许发表评论"}');
+
+-- 创建触发器自动更新updated_at字段
+CREATE TRIGGER IF NOT EXISTS update_settings_timestamp 
+AFTER UPDATE ON settings
+BEGIN
+  UPDATE settings SET updated_at = CURRENT_TIMESTAMP WHERE id = NEW.id;
+END;

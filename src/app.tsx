@@ -5,6 +5,7 @@ import { index } from './routes/index'
 import { posts } from './routes/posts'
 import { user } from './routes/user'
 import { tags } from './routes/tags'
+import { profile } from './routes/profile'
 import { D1Database } from '@cloudflare/workers-types'
 
 // 定义 Bindings 类型
@@ -30,5 +31,6 @@ app.route('/', index)
 app.route('/posts', posts)
 app.route('/user', user)
 app.route('/tags', tags)
+app.route('/profile', profile)
 
 export default app

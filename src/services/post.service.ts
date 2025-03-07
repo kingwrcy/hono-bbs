@@ -78,22 +78,4 @@ export class PostService {
     
     return result.success
   }
-
-  // 增加评论计数
-  async incrementCommentCount(postId: number): Promise<boolean> {
-    const result = await this.db.prepare(
-      'UPDATE posts SET comment_count = comment_count + 1 WHERE id = ?'
-    ).bind(postId).run()
-    
-    return result.success
-  }
-
-  // 减少评论计数
-  async decrementCommentCount(postId: number): Promise<boolean> {
-    const result = await this.db.prepare(
-      'UPDATE posts SET comment_count = CASE WHEN comment_count > 0 THEN comment_count - 1 ELSE 0 END WHERE id = ?'
-    ).bind(postId).run()
-    
-    return result.success
-  }
 }
