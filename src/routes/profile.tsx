@@ -84,72 +84,85 @@ profile.get("/:username", async (c) => {
   }?d=identicon&s=200`;
 
   return c.render(
-    <article class="profile-page">
-      <header>用户资料</header>
+    <article>
+      <header class="mb-2 text-xl font-bold">用户资料</header>
 
-      <div class="profile-container">
-        <div class="profile-header">
-          <div class="profile-avatar">
-            <img src={avatarUrl} alt={`${profileUser.username}的头像`} />
-          </div>
-          <div class="profile-info">
+      <div>
+        <div class="flex flex-row space-x-4 py-4">
+          <img
+            class="w-24 h-24 rounded-full"
+            src={avatarUrl}
+            alt={`${profileUser.username}的头像`}
+          />
+          <div class="flex flex-col space-y-1">
             <h2>{profileUser.username}</h2>
-            <p class="profile-joined">
+            <p class="text-sm">
               加入时间: <span data-timestamp={profileUser.created_at}></span>
             </p>
-            <p class="profile-bio">
+            <p class="text-sm">
               {profileUser.bio || "这个人很懒，什么都没写~"}
             </p>
           </div>
         </div>
 
-        <div class="profile-tabs">
-          <a
-            href={`/profile/${username}?tab=posts`}
-            class={tab === "posts" ? "active" : ""}
-          >
-            发帖记录
-          </a>
-          <a
-            href={`/profile/${username}?tab=comments`}
-            class={tab === "comments" ? "active" : ""}
-          >
-            评论记录
-          </a>
+        <div class="mt-10 w-[500px]">
+          <div role="group">
+            <button
+              hx-get={`/profile/${username}?tab=posts`}
+              hx-target="body"
+              hx-push-url="true"
+              class={tab === "posts" ? "contrast" : ""}
+            >
+              发帖记录
+            </button>
+            <button
+              hx-get={`/profile/${username}?tab=comments`}
+              hx-target="body"
+              hx-push-url="true"
+              class={tab === "comments" ? "contrast" : ""}
+            >
+              评论记录
+            </button>
+          </div>        
         </div>
 
         <div>
           {tab === "posts" && (
-            <div>
+            <div class="text-sm">
               {posts.length > 0 ? (
-                <ul class="post-list">
+                <ul class="space-y-1 pl-0">
                   {posts.map((post) => (
-                    <li key={post.id} class="post-item">
-                      <div class="post-title-row">
-                        <a class="post-title" href={`/posts/${post.id}`}>
-                          {post.title}
-                          {post.comment_count !== undefined &&
-                            post.comment_count > 0 && (
-                              <span class="post-comments">
-                                ({post.comment_count}条评论)
-                              </span>
-                            )}
-                        </a>
-                      </div>
+                    <li
+                      key={post.id}
+                      class="flex-wrap space-y-1 md:space-y-0 list-none flex items-center justify-between"
+                    >
+                      <a
+                        class="sm:flex-1 text-normal no-underline"
+                        href={`/posts/${post.id}`}
+                      >
+                        {post.title}
+                        {post.comment_count !== undefined &&
+                          post.comment_count > 0 && (
+                            <span>({post.comment_count}条评论)</span>
+                          )}
+                      </a>
 
-                      <div class="post-meta-row">
+                      <div class="flex items-center text-sm space-x-2">
+                        {post.tag && (
+                          <a
+                            class="bg-gray-2 p-1 rounded text-xs no-underline color-[var(--primary-inverse)]"
+                            href={`/posts?tag=${post.tag}`}
+                          >
+                            {post.tag}
+                          </a>
+                        )}
+
                         <span
                           class="post-time"
                           data-timestamp={post.created_at}
                         >
                           {new Date(post.created_at + "Z").toLocaleString()}
                         </span>
-
-                        {post.tag && (
-                          <span class="post-tag">
-                            <a href={`/posts?tag=${post.tag}`}>{post.tag}</a>
-                          </span>
-                        )}
                       </div>
                     </li>
                   ))}
@@ -161,25 +174,21 @@ profile.get("/:username", async (c) => {
           )}
 
           {tab === "comments" && (
-            <div>
+            <div class="text-sm">
               {comments.length > 0 ? (
-                <ul class="comment-list">
+                <ul class="space-y-1 pl-0">
                   {comments.map((comment) => (
-                    <li key={comment.id}>
-                      <div style="margin-bottom:10px;">
-                        <span
-                          style="margin-right:10px;"
-                          data-timestamp={comment.created_at}
-                        ></span>
+                    <li key={comment.id} class="list-none">
+                      <div class="space-x-2 mb-2">
+                        <span data-timestamp={comment.created_at}></span>
                         <a
                           href={`/posts/${comment.post_id}`}
-                          class="comment-post-title"
+                          class="no-underline"
                         >
                           评论于: {comment.post_title}
                         </a>
                       </div>
-                      <div
-                        class="comment-content"
+                      <div class="bg-gray-1 rounded p-4"
                         dangerouslySetInnerHTML={{ __html: comment.content }}
                       ></div>
                     </li>

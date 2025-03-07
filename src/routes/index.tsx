@@ -101,10 +101,10 @@ index.get("/posts", async (c) => {
           {posts.map((post) => (
             <li
               key={post.id}
-              class=" list-none flex items-center justify-between"
+              class="flex-wrap space-y-1 md:space-y-0 list-none flex items-center justify-between"
             >
               <a
-                class="flex-1 text-normal no-underline"
+                class="sm:flex-1 text-normal no-underline"
                 href={`/posts/${post.id}`}
               >
                 {post.title}
@@ -130,11 +130,11 @@ index.get("/posts", async (c) => {
                 {usernameToAvatar[post.author] && (
                   <img
                     hx-get={`profile/${post.author}`}
-                    hx-target-="body"
+                    hx-target="body"
                     hx-push-url="true"
                     src={usernameToAvatar[post.author]}
                     alt={`${post.author}'s avatar`}
-                    class="w-5 h-5 rounded-full"
+                    class="w-5 h-5 rounded-full cursor-pointer"
                   />
                 )}
               </div>

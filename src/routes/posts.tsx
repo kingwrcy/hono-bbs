@@ -21,7 +21,7 @@ posts.get("/new", jwtAuth, async (c) => {
 
   return c.render(
     <article>
-      <header>发布新帖子</header>
+      <header class="mb-2 text-xl font-bold">发布新帖子</header>
       <form action="/posts" method="post" id="post-form">
         <div>
           <label for="title">标题</label>
@@ -144,10 +144,8 @@ posts.get("/:id", async (c) => {
   return c.render(
     <div>
       <article class="post">
-        <header>
-          <div class="post-header">
-            <span class="post-title">{post.title}</span>
-          </div>
+        <header class="mb-2">
+          <div class="text-xl font-bold">{post.title}</div>
         </header>
 
         <div
@@ -256,22 +254,26 @@ posts.get("/:id", async (c) => {
               {comments.map((comment) => (
                 <div key={comment.id}>
                   <article>
-                    <header>
-                      <div class="comment-header">
-                        <span class="comment-author">
-                          {comment.author_avatar && (
-                            <img
-                              src={`${c.env.GRAVATAR_BASE_URL}${comment.author_avatar}?d=identicon`}
-                              alt={`${comment.author}'s avatar`}
-                              class="avatar-small"
-                              hx-get={`profile/${comment.author}`}
-                              hx-target="body"
-                              hx-push-url="true"
-                            />
-                          )}
-                          <a href={`/profile/${comment.author}`}>
-                            {comment.author}
-                          </a>
+                    <header class="mb-2 text-sm">
+                      <div class="flex items-center space-x-1">
+                        {comment.author_avatar && (
+                          <img
+                            src={`${c.env.GRAVATAR_BASE_URL}${comment.author_avatar}?d=identicon`}
+                            alt={`${comment.author}'s avatar`}
+                            class="w-5 h-5 rounded-full"
+                            hx-get={`profile/${comment.author}`}
+                            hx-target="body"
+                            hx-push-url="true"
+                          />
+                        )}
+                        <a href={`/profile/${comment.author}`}>
+                          {comment.author}
+                        </a>
+                        <span
+                          class="comment-date"
+                          data-timestamp={comment.created_at}
+                        >
+                          {new Date(comment.created_at + "Z").toLocaleString()}
                         </span>
                         {currentUser && (
                           <>
@@ -355,19 +357,14 @@ posts.get("/:id", async (c) => {
                             )}
                           </>
                         )}
-                        <span
-                          class="comment-date"
-                          data-timestamp={comment.created_at}
-                        >
-                          {new Date(comment.created_at + "Z").toLocaleString()}
-                        </span>
+                       
                         <span class="comment-floor">
                           #{comment.floor_number}楼
                         </span>
                       </div>
                     </header>
                     <div
-                      class="comment-content"
+                      class=""
                       dangerouslySetInnerHTML={{
                         __html: parseMarkdown(comment.content),
                       }}

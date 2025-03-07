@@ -47,16 +47,16 @@ tags.get("/", async (c) => {
       )}
 
       {allTags.length > 0 ? (
-        <div class="">
+        <div className="flex flex-col space-y-4">
           {allTags.map((tag) => (
             <div
              
               key={tag.id}
             >
-              <div  className="tag-list-view">
+              <div  >
                 <a
                   href={`/posts?tag=${tag.name}`}
-                  class="bg-gray-2 p-1 rounded mr-2 text-sm"
+                  class={`py-1 px-2 color-[var(--primary-inverse)] rounded no-underline bg-gray-2`}
                 >
                   {tag.name}({tag.post_count})
                 </a>
@@ -85,7 +85,7 @@ tags.get("/", async (c) => {
 tags.get("/new", jwtAuth, adminOnly, async (c) => {
   return c.render(
     <article>
-      <header>添加新标签</header>
+      <header class="mb-2 text-xl font-bold">添加新标签</header>
       <form action="/tags/new" method="post" class="form-card">
         <div class="form-group">
           <label for="name">标签名称:</label>
@@ -174,8 +174,8 @@ tags.get("/edit/:id", jwtAuth, adminOnly, async (c) => {
   const user = c.get("user");
 
   return c.render(
-    <div>
-      <h1>编辑标签</h1>
+    <article>
+      <header class="mb-2 text-xl font-bold">编辑标签</header>
       <form action={`/tags/edit/${id}`} method="post" class="form-card">
         <div class="form-group">
           <label for="name">标签名称:</label>
@@ -188,7 +188,7 @@ tags.get("/edit/:id", jwtAuth, adminOnly, async (c) => {
           保存修改
         </button>
       </form>
-    </div>,
+    </article>,
     {
       title: "编辑标签 - Hono BBS",
       user,

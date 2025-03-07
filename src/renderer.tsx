@@ -142,7 +142,7 @@ export const renderer = jsxRenderer(({ children, title, user }) => {
         <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.4/dist/htmx.min.js"></script>
       </head>
       <body un-cloak>
-        <main class="container">
+        <main class="container ">
           <Header user={user} />
           {children}
         </main>

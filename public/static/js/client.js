@@ -4,7 +4,9 @@
  * This script finds all elements with the data-timestamp attribute
  * and converts their UTC timestamps to local time in the format yyyy/MM/dd HH:mm:ss
  */
-document.addEventListener('DOMContentLoaded', function() {
+
+// Extract the timestamp conversion logic into a separate function
+function convertTimestamps() {
   // Find all elements with data-timestamp attribute
   const timestampElements = document.querySelectorAll('[data-timestamp]');
   
@@ -33,6 +35,16 @@ document.addEventListener('DOMContentLoaded', function() {
       // Update the element's text content
       element.textContent = formattedDate;
     }
+  });
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  // Convert timestamps on initial page load
+  convertTimestamps();
+  
+  // Also listen for HTMX content swaps
+  document.body.addEventListener('htmx:afterSwap', function() {
+    convertTimestamps();
   });
   
   /**
